@@ -7,6 +7,7 @@ from cam import Cam, Axis
 from cable import Cable, CablePiece, CableAttachment
 from spring import Spring
 from collections import deque
+import numpy as np
 
 def coordAxes():
     glColor3f(1.0, 0.0, 0.0)
@@ -71,10 +72,15 @@ model = Bow()
 cam_axis = Axis((-120., 400.))
 model.add_component(cam_axis)
 
-main_cam = Cam(cam_axis, -2., 20, 60., 1.)
+def elipse(sides, minor, ecc, start = 0):
+    def radius(angle):
+        return minor * (1 - ecc * ecc) / (1 + ecc * math.cos(angle))
+    return [radius(angle + start) for angle in np.linspace(0, math.tau, num=sides, endpoint=False)]
+
+main_cam = Cam(cam_axis, -2., elipse(20, 60., 0.5, -math.pi), 1.)
 model.add_component(main_cam)
 
-aux_cam = Cam(cam_axis, 2., 20, 20., -1.)
+aux_cam = Cam(cam_axis, 2., elipse(20, 20., 0.5, math.pi * 1.5), -1.)
 model.add_component(aux_cam)
 
 nock = CableAttachment((-200., 0.))

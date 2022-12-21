@@ -46,8 +46,3 @@ class Bow:
         symbols = list(itertools.chain.from_iterable(symbols))
 
         return list(sympy.linsolve(eqs, symbols))[0]
-        # force = solution[1] * self.main_string_piece.cable_direction[0]
-        # self.force_curve.append((self.draw_length, force))
-        # if len(self.force_curve) > 200:
-        #     self.force_curve.popleft()
-

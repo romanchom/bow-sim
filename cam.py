@@ -20,13 +20,9 @@ class Axis:
         self.angle_adjustment = 0
 
 class Cam:
-    def __init__(self, axis, angleOffset, sideCount, radius, direction):
+    def __init__(self, axis, angleOffset, radii, direction):
         self.axis = axis
-        self.sideCount = sideCount
-        self.radius = radius
-        self.lengths = [ (2 - i / sideCount) * radius * math.tau / sideCount for i in range(sideCount)]
-        self.lengths[0] /= 2
-        self.radii = [radius * (1.7 + 0.1 * math.sin(i * math.tau / sideCount)) for i in range(sideCount)]
+        self.radii = radii
         self.angleOffset = angleOffset
         self.direction = direction
         self.points = []
@@ -36,7 +32,7 @@ class Cam:
         self.points.clear()
         angle = self.axis.angle + self.angleOffset
         for i, r in enumerate(self.radii):
-            a = self.direction * i * math.tau / len(self.lengths) + angle
+            a = self.direction * i * math.tau / len(self.radii) + angle
             normal = sincos(a)
             self.points.append(self.axis.position + normal * r)
 

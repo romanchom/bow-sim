@@ -28,12 +28,16 @@ class Spring:
         glVertex2f(*self.cam.axis.position)
         glEnd()
 
-    def force(self):
+    def equations(self):
         spring_force = self.stiffness * np.dot(self.cam.axis.position - self.position, self.direction) * self.direction
         tangent = (-self.direction[1], self.direction[0])
+        force_x = self.balancing_force * tangent[0] + spring_force[0]
+        force_y = self.balancing_force * tangent[1] + spring_force[1]
         return (
-            self.balancing_force * tangent[0] + spring_force[0],
-            self.balancing_force * tangent[1] + spring_force[1],
+            (force_x,),
+            (force_y,),
+            (),
         )
 
-
+    def symbols(self):
+        return (self.balancing_force,)

@@ -12,7 +12,8 @@ class Axis:
         self.position_adjustment = np.array((0., 0.))
         self.angle_adjustment = 0
 
-    def adjust(self, alpha):
+    def update(self):
+        alpha = 0.5
         self.position += self.position_adjustment * alpha
         self.angle += self.angle_adjustment * alpha
         self.position_adjustment = np.array((0., 0.))

@@ -2,7 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
-from bow import Bow
+from model import Model
 from cam import Cam, Axis
 from cable import Cable, CablePiece, CableAttachment
 from spring import Spring
@@ -67,7 +67,7 @@ wind = glutCreateWindow("OpenGL Coding Practice")
 glutDisplayFunc(showScreen)
 glutIdleFunc(update)
 
-model = Bow()
+model = Model()
 
 cam_axis = Axis((-120., 400.))
 model.add_component(cam_axis)
@@ -77,10 +77,12 @@ def elipse(sides, minor, ecc, start = 0):
         return minor * (1 - ecc * ecc) / (1 + ecc * math.cos(angle))
     return [radius(angle + start) for angle in np.linspace(0, math.tau, num=sides, endpoint=False)]
 
-main_cam = Cam(cam_axis, -2., elipse(20, 60., 0.5, -math.pi), 1.)
+sides = 40
+
+main_cam = Cam(cam_axis, math.pi * -0.8, elipse(sides, 60., 0.5, math.pi * 0.9), 1.)
 model.add_component(main_cam)
 
-aux_cam = Cam(cam_axis, 2., elipse(20, 20., 0.5, math.pi * 1.5), -1.)
+aux_cam = Cam(cam_axis, 0.3, elipse(sides, 20., 0.5, math.pi * 0.8), -1.)
 model.add_component(aux_cam)
 
 nock = CableAttachment((-200., 0.))

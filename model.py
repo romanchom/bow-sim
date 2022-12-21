@@ -2,7 +2,7 @@ from OpenGL.GL import *
 import sympy
 import itertools
 
-class Bow:
+class Model:
     def __init__(self):
         self.components = []
 
@@ -13,13 +13,12 @@ class Bow:
         threshold = 0.1
         for i in range(1000):
             stress = sum(self.for_all(lambda c: c.apply_constraint()))
-            print(stress)
             self.update()
             if stress < threshold:
                 break
 
         if stress > threshold:
-            print("not good")
+            print("no convergence")
 
     def for_all(self, cb):
         for comp in self.components:

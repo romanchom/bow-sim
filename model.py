@@ -25,8 +25,8 @@ class Model:
             if stress < threshold:
                 break
 
-        if stress > threshold:
-            raise ConvergenceError(iterations, stress)
+        # if stress > threshold:
+        #     raise ConvergenceError(iterations, stress)
 
     def for_all(self, cb):
         for comp in self.components:
@@ -48,4 +48,4 @@ class Model:
         eqs = [sympy.Eq(exp, 0) for exp in eqs]
         symbols = list(itertools.chain.from_iterable(symbols))
 
-        return list(sympy.linsolve(eqs, symbols))[0]
+        return list(map(float, list(sympy.linsolve(eqs, symbols))[0]))

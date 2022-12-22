@@ -1,7 +1,14 @@
+from optimizer import Optimizer
+import csv
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-from optimizer import Optimizer
+
+def load_force_curve(file_name):
+    with open(file_name) as f:
+        r = csv.reader(f)
+        return {float(dl): float(f) for dl, f in r}
+
 
 def coordAxes():
     glColor3f(1.0, 0.0, 0.0)
@@ -16,12 +23,12 @@ def coordAxes():
     glEnd()
 
 
-force_curve = {}
-def update():
-    optimizer.analyze_bow()
-    glutPostRedisplay()
-
 def showScreen():
+    coordAxes()
+    optimizer.draw()
+
+    glutSwapBuffers()
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     glViewport(0, 0, 1000, 1000)
@@ -31,21 +38,18 @@ def showScreen():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-    coordAxes()
-    optimizer.draw()
+target_curve = load_force_curve('target_curve.csv')
 
-    glutSwapBuffers()
+optimizer = Optimizer()
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
 glutInitWindowSize(1000, 1000)
 glutInitWindowPosition(0, 0)
 wind = glutCreateWindow("OpenGL Coding Practice")
-glutDisplayFunc(showScreen)
-glutIdleFunc(update)
 
-optimizer = Optimizer()
+for i in range(1000):
+    optimizer.analyze_bow(showScreen if i % 20 == 19 else None)
+    optimizer.optimize(target_curve, 0.5 + i * 0.02)
+    showScreen()
 
-update()
-
-glutMainLoop()
